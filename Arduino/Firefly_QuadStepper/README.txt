@@ -1,0 +1,2 @@
+TO INSTALL ACCELSTEPPER LIBRARY: 
+Copy/Paste the AccelStepper folder into your ArduinoSketchDirectory/libraries folder.  This is most likely found at: C:\Users\UserName\Documents\Arduino\libraries.  You may need to make the libraries sub-folder the first time.  Then re-start your Arduino 1.0 IDE.  For more instructions visit: http://www.ladyada.net/library/arduino/libraries.html
