@@ -22,8 +22,8 @@
 #include <Adafruit_NeoPixel.h>
 #include "WS2812_Definitions.h"
 
-#define PIN 4
-#define LED_COUNT 144
+#define PIN 6
+#define LED_COUNT 300
 
 // Create an instance of the Adafruit_NeoPixel class called "leds".
 // That'll be what we refer to from here on...
@@ -38,14 +38,14 @@ void setup()
 
 void loop()
 {
-  
+  /*
   // Ride the Rainbow Road
   for (int i=0; i<LED_COUNT*10; i++)
   {
     rainbow(i);
     delay(1);  // Delay between rainbow slides
   }
-  
+  */
   /*
   // Indigo cylon
   // Do a cylon (larson scanner) cycle 10 times
@@ -55,7 +55,7 @@ void loop()
     cylon(INDIGO, 10);  // Indigo cylon eye!
   }
   */
-  /*
+  
   // A light shower of spring green rain
   // This will run the cascade from top->bottom 20 times
   for (int i=0; i<20; i++)
@@ -63,7 +63,7 @@ void loop()
     // First parameter is the color, second is direction, third is ms between falls
     cascade(MEDIUMSPRINGGREEN, TOP_DOWN, 100); 
   }
-  */
+  
 }
 
 // Implements a little larson "cylon" sanner.

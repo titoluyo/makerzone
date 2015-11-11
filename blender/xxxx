@@ -1,0 +1,29 @@
+import sys
+sys.path.append("/usr/local/lib/python3.4/dist-packages/")
+import serial                   #PySerial Module
+ 
+import bge                      #blender game engine
+import math                     #Maths Module
+ 
+ser=serial.Serial('/dev/ttyUSB0',9600)     #Propeller 115200 Baud
+                                                #Arduino     9600 Baud Max
+a=0.0
+def AnaLoop():                  #Set us continous Serial receive
+ while ser.inWaiting()!=0:      #If data RX then process
+     global a                   #
+     a=(ord(ser.read(1)))       #string of length one, return an integer
+     print (a)                  #Print to debug window
+     
+   
+def Cube():
+    global a
+    scene = bge.logic.getCurrentScene()     #Locate current device
+    cont = bge.logic.getCurrentController()
+    own = cont.owner  
+ 
+    xyz = own.localOrientation.to_euler()   #Extract the Rotation Data  
+    xyz[2] = math.radians(a)
+                                            #xyz[0] x Rotation axis
+                                            #xyz[1] y Rotation axis
+                                            #xyz[2] z Rotation axis
+    own.localOrientation = xyz.to_matrix()  #Apply your rotation data
