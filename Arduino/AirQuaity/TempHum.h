@@ -2,6 +2,7 @@
 #define TempHum_h
 
 #include "Sensor.h"
+#include <DHT.h>
 
 #define CANTIDAD_VALORES 3
 
