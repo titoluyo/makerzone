@@ -1,8 +1,8 @@
 #ifndef TempHum_h
 #define TempHum_h
 
-#include "Sensor.h"
 #include <DHT.h>
+#include "Sensor.h"
 
 #define CANTIDAD_VALORES 3
 
