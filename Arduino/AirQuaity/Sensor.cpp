@@ -26,7 +26,7 @@ char* Sensor::getValue(int index) {}
 // Obtener el valor actual del sensor
 char* Sensor::getValue2(String title) {
   //s = "|" + title + ":" + s;
-  s = "," + s;
+  //s = "," + s;
   s.toCharArray(c,sizeof(c));
   return c;
 }
