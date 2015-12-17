@@ -14,7 +14,7 @@ Sensor* sensor[5];
 
 unsigned long previousMillis = 0;
 unsigned long currentMillis;
-unsigned int interval = 20000; // envia datos al server cada 20seg
+unsigned int interval = 10000; // envia datos al server cada 10seg
 
 void Mensaje(char *msg){
   Serial.println(msg);
@@ -41,7 +41,7 @@ void sendDataServer() {
   Serial.println(trama);
   char tramac[trama.length()+1];
   trama.toCharArray(tramac,sizeof(tramac));
-  sim->sendData("162.243.69.120",8989,tramac, trama.length()+1);
+  sim->sendData("162.243.69.120",8989,tramac, trama.length());
 }
 
 

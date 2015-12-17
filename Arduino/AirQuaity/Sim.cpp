@@ -11,38 +11,42 @@ Sim::Sim(uint8_t tx, uint8_t rx, uint8_t rst, uint8_t pwr) {
 }
 
 void Sim::setup() {
-	pinMode(5, OUTPUT);
-	
-	Serial.println(F("Reiniciando FONA"));
-	fonaSerial->begin(4800);
+  pinMode(_pwr, OUTPUT);
+
+  Serial.println(F("Reiniciando FONA"));
+  fonaSerial->begin(4800);
   bool initok = false;
   while (!initok) {
-  	if(!fona->begin(*fonaSerial)){
-  		Serial.println(F("No se encontró el FONA"));
-  		//while(1);
+    if(!fona->begin(*fonaSerial)){
+      Serial.println(F("No se encontró el FONA"));
+      //while(1);
       PowerToggle();
-  	} else {
+    } else {
       initok = true;
-  	}
+    }
   }
 
   fona->setGPRSNetworkSettings(F("movistar.pe"), F("movistar@datos"), F("movistar"));
 
-	/*
-	Serial.println("Registrando APN");
-  fona->setGPRSNetworkSettings(F("movistar.pe"), F("movistar@datos"), F("movistar"));
-  delay(5000);
+  Serial.println(F("Habilitando Tiempo de Red"));
 
-  Serial.println("Deshabilitando Datos");
-  if (!fona->enableGPRS(false))
+  while(!fona->enableNetworkTimeSync(true))
+    Serial.println(F("Error habilitando tiempo de red"));
+  /*
+    Serial.println("Registrando APN");
+    fona->setGPRSNetworkSettings(F("movistar.pe"), F("movistar@datos"), F("movistar"));
+    delay(5000);
+
+    Serial.println("Deshabilitando Datos");
+    if (!fona->enableGPRS(false))
     Serial.println(F("Failed to turn off Data"));
-  delay(2000);
+    delay(2000);
 
-  Serial.println("Habilitando Datos");
-  if (!fona->enableGPRS(true))
+    Serial.println("Habilitando Datos");
+    if (!fona->enableGPRS(true))
     Serial.println(F("Failed to turn on Data"));
-  delay(5000);
-*/
+    delay(5000);
+  */
   Serial.println("Deshabilitando GPS");
   if (!fona->enableGPS(false))
     Serial.println(F("Failed to turn off GPS"));
@@ -82,11 +86,10 @@ void Sim::setup() {
 }
 
 void Sim::PowerToggle(){
-  pinMode(_pwr, OUTPUT);
-	digitalWrite(_pwr, HIGH);
-	delay(2200);
-	digitalWrite(_pwr, LOW);
-	delay(2200);
+  digitalWrite(_pwr, HIGH);
+  delay(2200);
+  digitalWrite(_pwr, LOW);
+  delay(2200);
 }
 
 uint8_t Sim::getTime(char *buff, uint16_t maxlen){
@@ -129,7 +132,7 @@ uint8_t Sim::getGPSvalores(uint8_t arg, char *buffer, uint8_t maxbuff) {
 uint8_t cantValoresSensores;
 String Sim::construyeTrama(String valoresSensores[]){
   char sep = ',';
-  String trama = String(VERSION);
+  String trama = String(VERSION, DEC);
   trama.concat(sep);
   trama.concat(NODO);
   trama.concat(sep);
