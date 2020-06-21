@@ -5,17 +5,17 @@
 #define LED_BUILTIN 2
 #endif
 
-WiFiClient espClient;
-PubSubClient client(espClient);
-const char* inTopic;
-const char* outTopic;
-unsigned long nowMqtt;
-unsigned long lastMqtt = 0;
-long value = 0;
-#define MSG_BUFFER_SIZE	(50)
-char msg[MSG_BUFFER_SIZE];
+MQTTConn::MQTTConn(/* args */)
+{
+  client = PubSubClient(espClient);
+}
 
-void callback(char* topic, byte* payload, unsigned int length) {
+MQTTConn::~MQTTConn()
+{
+}
+
+
+void MQTTConn::callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
@@ -36,8 +36,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
 }
 
-
-void setup_MQTT(const char * domain, uint16_t port, const char * pinTopic, const char * poutTopic) {
+void MQTTConn::setup(const char * domain, uint16_t port, const char * pinTopic, const char * poutTopic) {
   inTopic = pinTopic;
   outTopic = poutTopic;
   pinMode(LED_BUILTIN, OUTPUT);
@@ -45,7 +44,7 @@ void setup_MQTT(const char * domain, uint16_t port, const char * pinTopic, const
   client.setCallback(callback);
 }
 
-void reconnect() {
+void MQTTConn::reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
@@ -67,7 +66,7 @@ void reconnect() {
   }
 }
 
-void mqtt_loop() {
+void MQTTConn::mqtt_loop() {
   nowMqtt = millis();
 
   if(!client.connected()) {
@@ -76,7 +75,7 @@ void mqtt_loop() {
   client.loop();
 }
 
-const char* getMessage() {
+const char* MQTTConn::getMessage() {
   snprintf(msg, MSG_BUFFER_SIZE, "");
   if (nowMqtt - lastMqtt > 2000) {
     lastMqtt = nowMqtt;
@@ -88,6 +87,6 @@ const char* getMessage() {
   return msg;
 }
 
-void publish(const char* payload) {
+void MQTTConn::publish(const char* payload) {
     client.publish(outTopic, payload);
 }
