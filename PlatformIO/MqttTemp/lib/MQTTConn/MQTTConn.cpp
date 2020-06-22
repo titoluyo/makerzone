@@ -5,9 +5,11 @@
 #define LED_BUILTIN 2
 #endif
 
-MQTTConn::MQTTConn(/* args */)
+MQTTConn::MQTTConn(const char * pinTopic, const char * poutTopic)
 {
-  client = PubSubClient(espClient);
+  this->inTopic = pinTopic;
+  this->outTopic = poutTopic;
+  this->client = PubSubClient(espClient);
 }
 
 MQTTConn::~MQTTConn()
@@ -15,7 +17,7 @@ MQTTConn::~MQTTConn()
 }
 
 
-void MQTTConn::callback(char* topic, byte* payload, unsigned int length) {
+void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
@@ -36,29 +38,27 @@ void MQTTConn::callback(char* topic, byte* payload, unsigned int length) {
   }
 }
 
-void MQTTConn::setup(const char * domain, uint16_t port, const char * pinTopic, const char * poutTopic) {
-  inTopic = pinTopic;
-  outTopic = poutTopic;
+void MQTTConn::setup(const char * domain, uint16_t port) {
   pinMode(LED_BUILTIN, OUTPUT);
-  client.setServer(domain, port);
-  client.setCallback(callback);
+  this->client.setServer(domain, port);
+  this->client.setCallback(callback);
 }
 
 void MQTTConn::reconnect() {
   // Loop until we're reconnected
-  while (!client.connected()) {
+  while (!this->client.connected()) {
     Serial.print("Attempting MQTT connection...");
     // Create a random client ID
     String clientId = "Client-";
     clientId += String(random(0xffff), HEX);
     // Attempt to connect
-    if (client.connect(clientId.c_str())) {
+    if (this->client.connect(clientId.c_str())) {
       Serial.println("connected");
       // Once connected, resubscribe
-      client.subscribe(inTopic);
+      this->client.subscribe(inTopic);
     } else {
       Serial.print("failed, rc=");
-      Serial.print(client.state());
+      Serial.print(this->client.state());
       Serial.println(" try again in 5 seconds");
       // Wait 5 seconds before retrying
       delay(5000);
@@ -66,27 +66,15 @@ void MQTTConn::reconnect() {
   }
 }
 
-void MQTTConn::mqtt_loop() {
-  nowMqtt = millis();
-
-  if(!client.connected()) {
-    reconnect();
+void MQTTConn::loop() {
+  if(!this->client.connected()) {
+    this->reconnect();
   }
-  client.loop();
-}
-
-const char* MQTTConn::getMessage() {
-  snprintf(msg, MSG_BUFFER_SIZE, "");
-  if (nowMqtt - lastMqtt > 2000) {
-    lastMqtt = nowMqtt;
-    ++value;
-    snprintf (msg, MSG_BUFFER_SIZE, "hello world #%ld", value);
-    Serial.print("Publish message: ");
-    Serial.println(msg);
-  }
-  return msg;
+  this->client.loop();
 }
 
 void MQTTConn::publish(const char* payload) {
-    client.publish(outTopic, payload);
+  Serial.println(this->outTopic);
+  Serial.println(payload);
+  this->client.publish(this->outTopic, payload);
 }
