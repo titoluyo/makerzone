@@ -14,7 +14,7 @@ const char* readTemp() {
     Serial.println("Impossible to read DHT!");
     return "";
   }
-  snprintf (msgTemp, MSG_BUFFER_SIZE, "H:%1f,T%2fC", h, t);
+  snprintf (msgTemp, MSG_BUFFER_SIZE, "%4.2f|%4.2f", h, t);
   Serial.println(msgTemp);
   return msgTemp;
 }
