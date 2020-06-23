@@ -3,11 +3,13 @@
 
 #include "DHT.h"
 
-#define DHTPIN D4
+// D4 -> 2
+#define DHTPIN 2
 #define DHTTYPE DHT22
+#define MSG_BUFFER_SIZE	(50)
 
 void tempBegin();
 
-void readTemp();
+const char* readTemp();
 
 #endif

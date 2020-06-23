@@ -8,13 +8,21 @@
 #endif
 #include <PubSubClient.h>
 
-
-void setup_MQTT(const char * domain, uint16_t port, const char * pinTopic, const char * poutTopic);
-
-void mqtt_loop();
-
-const char* getMessage();
-
-void publish(const char* payload);
+class MQTTConn
+{
+private:
+  WiFiClient espClient;
+  PubSubClient client;
+  const char* inTopic;
+  const char* outTopic;
+  long value = 0;
+  void reconnect();
+public:
+  MQTTConn(const char * pinTopic, const char * poutTopic);
+  ~MQTTConn();
+  void setup(const char * domain, uint16_t port);
+  void loop();
+  void publish(const char* payload);
+};
 
 #endif
