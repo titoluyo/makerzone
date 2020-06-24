@@ -1,7 +1,8 @@
 #ifndef TempRead_h
 #define TempRead_h
 
-#include "DHT.h"
+#include <DHT.h>
+#include <DHT_U.h>
 
 // D4 -> 2
 #define DHTPIN 2

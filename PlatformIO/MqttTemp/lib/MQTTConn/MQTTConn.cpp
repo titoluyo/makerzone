@@ -52,7 +52,6 @@ void MQTTConn::loop() {
 }
 
 void MQTTConn::publish(const char* payload) {
-  Serial.println(this->outTopic);
   Serial.println(payload);
   this->client.publish(this->outTopic, payload);
 }
