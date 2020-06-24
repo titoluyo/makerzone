@@ -20,7 +20,7 @@ private:
 public:
   MQTTConn(const char * pinTopic, const char * poutTopic);
   ~MQTTConn();
-  void setup(const char * domain, uint16_t port);
+  void setup(const char * domain, uint16_t port, MQTT_CALLBACK_SIGNATURE);
   void loop();
   void publish(const char* payload);
 };
