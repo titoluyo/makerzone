@@ -17,29 +17,7 @@ MQTTConn::~MQTTConn()
 }
 
 
-void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Message arrived [");
-  Serial.print(topic);
-  Serial.print("] ");
-  for (unsigned int i = 0; i < length; i++) {
-    Serial.print((char)payload[i]);
-  }
-  Serial.println();
-
-  // Switch on the LED if an 1 was received as first character
-  if ((char)payload[0] == '1') {
-    Serial.println("led ON");
-    digitalWrite(LED_BUILTIN, LOW);   // Turn the LED on (Note that LOW is the voltage level
-    // but actually the LED is on; this is because
-    // it is active low on the ESP-01)
-  } else {
-    Serial.println("led OFF");
-    digitalWrite(LED_BUILTIN, HIGH);  // Turn the LED off by making the voltage HIGH
-  }
-}
-
-void MQTTConn::setup(const char * domain, uint16_t port) {
-  pinMode(LED_BUILTIN, OUTPUT);
+void MQTTConn::setup(const char * domain, uint16_t port, MQTT_CALLBACK_SIGNATURE) {
   this->client.setServer(domain, port);
   this->client.setCallback(callback);
 }
